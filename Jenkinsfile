@@ -11,10 +11,15 @@ pipeline {
                 bat "npm install"
             }
         }
-        stage("Start"){
-            steps{
-                bat "docker-compose up"
-            }
+        stage("Deploy"){
+        docker.withRegistry('https://registry.hub.docker.com', 'dockerHub') {
+
+            def customImage = docker.build("react_docker")
+
+            /* Push the container to the custom Registry */
+            customImage.push()
+    
+}
         }
         stage('Test') {
             steps {
