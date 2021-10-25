@@ -27,5 +27,18 @@ pipeline {
                 }
             }
         }
+        stage('docker stop container') {
+            steps {
+                sh 'docker ps -f name=jenkinsImageContainer -q | xargs --no-run-if-empty docker container stop'
+                sh 'docker container ls -a -fname=jenkinsImageContainer -q | xargs -r docker container rm'
+             }
+         }
+       stage('Docker Run') {
+        steps{
+            script {
+                dockerImage.run("-p 3000:3000 --rm --name jenkinsImageContainer")
+            }
+          }
+       }
     }
 }
