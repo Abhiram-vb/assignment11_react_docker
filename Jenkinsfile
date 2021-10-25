@@ -1,29 +1,18 @@
 pipeline {
     agent any
+    environment{
+        dockerImage=""
+        registry="abhiramvaluebound/testApp"
+    }
     stages {
-        stage('Hello') {
+        stage('Checkout') {
             steps {
-                echo 'Hello World'
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Abhiram-vb/assignment11_react_docker']]])
             }
         }
-        stage('Build') {
-            steps {
-                bat "npm install"
-            }
-        }
-        stage("Start"){
+        stage("build Docker image"){
             steps{
-                bat "docker-compose up"
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Hello World Testing'
-            }
-        }
-        stage('Hello Deploy') {
-            steps {
-                echo 'Hello World Deployed'
+                dockerImage = docker.build registry
             }
         }
     }
