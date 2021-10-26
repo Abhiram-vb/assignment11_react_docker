@@ -18,6 +18,11 @@ pipeline {
                 }
             }
         }
+        stage("test"){
+            steps{
+                echo "Testing done successfully"
+            }
+        }
         stage("upload Docker image"){
             steps{
                 script{
